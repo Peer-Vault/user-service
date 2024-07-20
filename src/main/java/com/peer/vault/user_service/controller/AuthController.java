@@ -23,7 +23,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public String addNewUser(@RequestBody UserCredential user) {
-        user.setAccountCreatedAt(LocalDateTime.now());
         return service.saveUser(user);
     }
 
