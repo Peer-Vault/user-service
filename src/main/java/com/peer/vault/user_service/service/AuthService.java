@@ -1,6 +1,7 @@
 package com.peer.vault.user_service.service;
 
 import com.peer.vault.user_service.domain.UserCredential;
+import com.peer.vault.user_service.domain.UserCredentialDto;
 import com.peer.vault.user_service.repository.UserCredentialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,14 +21,18 @@ public class AuthService {
 //    private KafkaProducerService kafkaProducerService;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     private JwtService jwtService;
 
-    public String saveUser(UserCredential credential) {
+    public UserCredential saveUser(UserCredential credential) {
         credential.setPassword(passwordEncoder.encode(credential.getPassword()));
         credential.setAccountCreatedAt(LocalDateTime.now());
-        repository.save(credential);
+        UserCredential savedUser = repository.save(credential);
 //        kafkaProducerService.sendNotificationRegistration(credential.getEmail());
-        return "user added to the system";
+        emailService.sendRegistrationSuccessEmail(credential);
+        return savedUser;
     }
 
     public String generateToken(String email) {
@@ -40,4 +45,24 @@ public class AuthService {
     }
 
 
+    public UserCredentialDto getCurrentUser(UserCredential userCredential) {
+
+        UserCredentialDto userCredentialDto = new UserCredentialDto(
+                userCredential.getId(),
+                userCredential.getUsername(),
+                userCredential.getFirstName(),
+                userCredential.getLastName(),
+                userCredential.getGender(),
+                userCredential.getEmail(),
+                userCredential.getPhoneNumber(),
+                userCredential.getDateOfBirth(),
+                userCredential.getAddress(),
+                userCredential.getRoles(),
+                userCredential.getAccountCreatedAt(),
+                userCredential.getProfilePictureUrl(),
+                userCredential.getBio()
+        );
+
+        return userCredentialDto;
+    }
 }
