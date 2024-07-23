@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/userinfo")
+@RequestMapping("/user/userinfo")
 public class UserController {
 
     @Autowired
@@ -22,3 +22,4 @@ public class UserController {
     }
 
 }
+
