@@ -27,8 +27,6 @@ public class AuthConfig {
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .authorizeRequests()
                 .requestMatchers("/user/auth/register", "/user/auth/login", "/user/auth/validate").permitAll()
-                .requestMatchers("/user/userinfo/**").authenticated()
-                .requestMatchers("/user/auth/current-user").authenticated()
                 .anyRequest().authenticated();
 
         return http.build();

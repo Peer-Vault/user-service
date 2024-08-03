@@ -4,6 +4,19 @@ spring:
   config:
     import: optional:configserver:http://localhost:8071/
 
+#  cloud:
+#    gateway:
+#      globalcors:
+#        cors-configurations:
+#          '[/**]':
+#            allowedOrigins: "*"
+#            allowedMethods:
+#              - GET
+#              - POST
+#              - PUT
+#              - DELETE
+
+
 #  kafka:
 #    producer:
 #      bootstrap-servers: localhost:9095
