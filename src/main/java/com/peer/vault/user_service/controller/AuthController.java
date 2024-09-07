@@ -31,13 +31,38 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<String> getToken(@RequestBody AuthRequest authRequest) {
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
-        if (authenticate.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.OK).body(service.generateToken(authRequest.getEmail()));
-        } else {
-            throw new RuntimeException("invalid access");
+        System.out.println("login api:::");
+
+        try {
+            Authentication authenticate = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
+            );
+
+            System.out.println(authenticate.getAuthorities() + " -------------------------- " + authenticate.isAuthenticated());
+
+            if (authenticate.isAuthenticated()) {
+                return ResponseEntity.status(HttpStatus.OK).body(service.generateToken(authRequest.getEmail()));
+            } else {
+                throw new RuntimeException("invalid access");
+            }
+        } catch (Exception e) {
+            System.out.println("Authentication failed: " + e.getMessage());
+            throw new RuntimeException("Authentication failed", e);
         }
     }
+
+
+//    @PostMapping("/login")
+//    public ResponseEntity<String> getToken(@RequestBody AuthRequest authRequest) {
+//        System.out.println("login api:::");
+//        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
+//        System.out.println(authenticate.getAuthorities()  + " ----------- " + authenticate.isAuthenticated());
+//        if (authenticate.isAuthenticated()) {
+//            return ResponseEntity.status(HttpStatus.OK).body(service.generateToken(authRequest.getEmail()));
+//        } else {
+//            throw new RuntimeException("invalid access");
+//        }
+//    }
 
     @GetMapping("/current-user")
     public ResponseEntity<UserCredentialDto> getCurrentUser() {
