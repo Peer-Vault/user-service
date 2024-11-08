@@ -2,8 +2,10 @@ package com.peer.vault.user_service.service;
 
 import com.peer.vault.user_service.domain.UserCredential;
 import com.peer.vault.user_service.domain.UserCredentialDto;
+import com.peer.vault.user_service.messaging.KafkaProducer;
 import com.peer.vault.user_service.repository.UserCredentialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +19,8 @@ public class AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-//    @Autowired
-//    private KafkaProducerService kafkaProducerService;
+    @Autowired
+    private KafkaProducer producer;
 
     @Autowired
     private EmailService emailService;
@@ -30,8 +32,11 @@ public class AuthService {
         credential.setPassword(passwordEncoder.encode(credential.getPassword()));
         credential.setAccountCreatedAt(LocalDateTime.now());
         UserCredential savedUser = repository.save(credential);
+        if (producer != null){
+            producer.producerForRegistration(credential);
+        }
 //        kafkaProducerService.sendNotificationRegistration(credential.getEmail());
-        emailService.sendRegistrationSuccessEmail(credential);
+//        emailService.sendRegistrationSuccessEmail(credential);
         return savedUser;
     }
 
