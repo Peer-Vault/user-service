@@ -2,7 +2,7 @@ package com.peer.vault.user_service.utils;
 
 public final class KafkaConstants {
 
-    public static final String USER_REGISTRATION = "PEER_VAULT.USER_REGISTRATION";
+    public static final String USER_REGISTRATION = "PEER_VAULT_USER_REGISTRATION";
 
     public static final String GROUP_EMAIL = "GROUP_EMAIL";
 

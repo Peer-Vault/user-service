@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Service
 public class KafkaProducer {
@@ -20,7 +23,12 @@ public class KafkaProducer {
 
     public void producerForRegistration(UserCredential credential){
         try {
-            String userJson = objectMapper.writeValueAsString(credential);
+            Map<String, String> userRegistration = new HashMap<>();
+            userRegistration.put("email", credential.getEmail());
+            userRegistration.put("first", credential.getFirstName());
+            userRegistration.put("last", credential.getLastName());
+            String userJson = objectMapper.writeValueAsString(userRegistration);
+
             kafkaTemplate.send(KafkaConstants.USER_REGISTRATION, userJson);
             System.out.println("Sent user registration data to Kafka topic: " + credential.getEmail());
         } catch (Exception e) {
