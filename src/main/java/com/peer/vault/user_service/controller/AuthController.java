@@ -37,8 +37,6 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
             );
 
-            System.out.println(authenticate.getAuthorities() + " -------------------------- " + authenticate.isAuthenticated());
-
             if (authenticate.isAuthenticated()) {
                 return ResponseEntity.status(HttpStatus.OK).body(service.generateToken(authRequest.getEmail()));
             } else {
